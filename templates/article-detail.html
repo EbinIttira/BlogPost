@@ -18,12 +18,17 @@
             {% if request.user == post.author %}
             <div>
                <a href="{% url 'blog:update_blog' post.id %}" class="btn btn-success">Update Blog</a>
-               <a href="" class="btn btn-danger">Delete Blog</a>
+               <a href="{% url 'blog:delete_blog' post.id %}" class="btn btn-danger" onclick="return DeleteConfirm()">Delete Blog</a>
             </div>
             {% endif %}
         </div>
     </div>
 
 </div>
-
+<script>
+    function DeleteConfirm(){
+        choice=confirm("Do you wish to delete this blog ?")
+        return choice;
+    }
+</script>
 {% endblock %}

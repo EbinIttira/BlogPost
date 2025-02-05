@@ -78,8 +78,12 @@ def UpdateBlog(request,pid):
         return redirect("blog:article_detail",article.id)
     return render(request,"update-blog.html",{"post":article})
 
-        
-
+def DeleteBlog(request,pid):
+    article=get_object_or_404(Blogs,id=pid)
+    if request.user!=article.author:
+        messages.error(request,"Permission denied")
+    article.delete()
+    return redirect("blog:my_articles")
 
 def Custom_404_Page(request,exception):
     return render(request,'404.html',status=404)

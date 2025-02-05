@@ -58,5 +58,8 @@ def AddBlog(request):
 def MyArticles(request):
     user=User.objects.get(id=request.user.id)
     articles = Blogs.objects.select_related("author").filter(author=user)
-   
     return render(request,"my-articles.html",{"author":user,"posts":articles})
+
+def ArticleDetail(request,id):
+    article=Blogs.objects.get(id=id)
+    return render(request,"article-detail.html",{"post":article})

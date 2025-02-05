@@ -13,6 +13,19 @@
         </div>
 
         <div class="col-12 col-md-8 col-lg-9 py-4">
+            {% for msg in messages %}
+            <div class="alert 
+                {% if msg.tags == 'success' %}alert-success
+                {% elif msg.tags == 'error' %}alert-danger
+                {% elif msg.tags == 'warning' %}alert-warning
+                {% elif msg.tags == 'info' %}alert-info
+                {% endif %} 
+                alert-dismissible fade show" role="alert">
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    
+            {% endfor %}
             <h2 class="text-center mb-4">My Articles</h2>
             <div class="row">
                 {% for post in posts %}

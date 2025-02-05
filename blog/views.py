@@ -3,10 +3,18 @@ from blog.models import User
 from django.contrib import messages
 from django.contrib import auth
 from blog.models import Blogs
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 def Home(request):
-    return render(request,"index.html")
+    blogs=Blogs.objects.all().order_by('-publish_date')
+    p=Paginator(blogs,10)
+    page=request.GET.get("page",1)
+    if page!=1 and request.user.is_authenticated!=True:
+        return redirect("blog:login")
+    articles=p.get_page(page)
+    return render(request,"index.html",{"posts":articles})
 
 def Register(request):
     if request.method=="POST":
@@ -42,11 +50,12 @@ def UserLogin(request):
             messages.error(request,"Invalid credentials")
             return redirect("blog:login")
     return render(request,'login.html')
-
+@login_required(login_url="blog:login")
 def UserLogout(request):
      auth.logout(request)
      return redirect("blog:index")
 
+@login_required(login_url="blog:login")
 def AddBlog(request):
     if request.method=="POST":
         t=request.POST['title']
@@ -55,15 +64,18 @@ def AddBlog(request):
         return redirect("blog:index")
     return render(request,"add-blog.html")
 
+@login_required(login_url="blog:login")
 def MyArticles(request):
     user=User.objects.get(id=request.user.id)
     articles = Blogs.objects.select_related("author").filter(author=user)
     return render(request,"my-articles.html",{"author":user,"posts":articles})
 
+@login_required(login_url="blog:login")
 def ArticleDetail(request,id):
     article=get_object_or_404(Blogs,id=id)
     return render(request,"article-detail.html",{"post":article})
 
+@login_required(login_url="blog:login")
 def UpdateBlog(request,pid):
     article=get_object_or_404(Blogs,id=pid)
     if request.user!=article.author:
@@ -78,6 +90,7 @@ def UpdateBlog(request,pid):
         return redirect("blog:article_detail",article.id)
     return render(request,"update-blog.html",{"post":article})
 
+@login_required(login_url="blog:login")
 def DeleteBlog(request,pid):
     article=get_object_or_404(Blogs,id=pid)
     if request.user!=article.author:

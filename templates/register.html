@@ -5,7 +5,17 @@
 <div class="container d-flex justify-content-center align-items-center">
     <div class="card p-4 shadow-lg form-card">
         {% for msg in messages %}
-        {{msg}}
+        <div class="alert 
+            {% if msg.tags == 'success' %}alert-success
+            {% elif msg.tags == 'error' %}alert-danger
+            {% elif msg.tags == 'warning' %}alert-warning
+            {% elif msg.tags == 'info' %}alert-info
+            {% endif %} 
+            alert-dismissible fade show" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         {% endfor %}
         <h2 class="text-center mb-4">Register</h2>
         <form method="post" action="{% url 'blog:register' %}" enctype="multipart/form-data" onsubmit="return ValidateForm()">

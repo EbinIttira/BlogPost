@@ -13,7 +13,8 @@ urlpatterns=[
     # Blog
     path("add-blog/",views.AddBlog,name="add_blog"),
     path("my-articles",views.MyArticles,name="my_articles"),
-    path("article-detail/<int:id>/",views.ArticleDetail,name="article_detail")
+    path("article-detail/<int:id>/",views.ArticleDetail,name="article_detail"),
+    path("update-article/<int:pid>/",views.UpdateBlog,name="update_blog")
 
 
 ]

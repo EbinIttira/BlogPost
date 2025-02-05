@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from blog.models import User
 from django.contrib import messages
 from django.contrib import auth
@@ -61,5 +61,25 @@ def MyArticles(request):
     return render(request,"my-articles.html",{"author":user,"posts":articles})
 
 def ArticleDetail(request,id):
-    article=Blogs.objects.get(id=id)
+    article=get_object_or_404(Blogs,id=id)
     return render(request,"article-detail.html",{"post":article})
+
+def UpdateBlog(request,pid):
+    article=get_object_or_404(Blogs,id=pid)
+    if request.user!=article.author:
+        messages.error(request,"Permission denied")
+        return redirect("blog:index")
+    if request.method=="POST":
+        t=request.POST['title']
+        blog=request.POST['article']
+        article.title=t
+        article.article=blog
+        article.save()
+        return redirect("blog:article_detail",article.id)
+    return render(request,"update-blog.html",{"post":article})
+
+        
+
+
+def Custom_404_Page(request,exception):
+    return render(request,'404.html',status=404)

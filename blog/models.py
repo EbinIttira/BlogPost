@@ -11,5 +11,5 @@ class Blogs(models.Model):
     title=models.CharField(max_length=40)
     article=models.TextField()
     author=models.ForeignKey(User,on_delete=models.CASCADE)
-    publish_date=models.DateField(auto_now_add=True)
+    publish_date=models.DateField(auto_now=True)
    

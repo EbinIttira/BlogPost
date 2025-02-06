@@ -27,7 +27,7 @@
             {% endfor %}
             <h2 class="mb-4">{{post.title}}</h2>
             <p style="color: grey;">{{ post.publish_date|date:"M d, Y" }}</p>
-            <p>{{post.article}}</p>
+            <p style="white-space: pre-line;">{{post.article}}</p>
             {% if request.user == post.author %}
             <div>
                <a href="{% url 'blog:update_blog' post.id %}" class="btn btn-success">Update Blog</a>
